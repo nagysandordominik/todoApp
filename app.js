@@ -10,5 +10,7 @@ if(addButton){
 function addToDo(event) {
   event.preventDefault();
   let text = todoInput.value;
-  here.innerHTML = text;
+  const newTodo = document.createElement('p')
+  newTodo.innerHTML =  `<p id="here" class="d-inline"><input class="form-check-input me-2" type="checkbox" value="" aria-label="..." />${text}</p>`;
+  todoList.appendChild(newTodo);
 }

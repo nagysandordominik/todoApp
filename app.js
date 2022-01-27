@@ -29,6 +29,9 @@ addButton.addEventListener('click', addToDo => {
 
 function completedToDo(event) {
   event.target.parentNode.classList.toggle('text-decoration-line-through');
-  setTimeout(function() {event.target.parentNode.parentNode.remove();}, 3000);
+  setTimeout(function() {
+    event.target.parentNode.parentNode.remove();
+    todoTaskList.splice(event.target.parentNode.parentNode,1)
+  }, 3000);
   }
   

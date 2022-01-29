@@ -3,7 +3,6 @@ const addButton = document.getElementById('addB');
 const todoList = document.getElementById('todoList');
 const todoTaskList  = [];
 const completedToDo = [];
-let id = 2;
 
 function randomId() {
   let S4 = function() {
@@ -43,7 +42,7 @@ function completeToDo(event, todoTask) {
   let selectedTask = event.target.parentNode.parentNode;
   // With timeout the selected task is removed from display and todoTaskList, than it is added to completedTodo array 
   setTimeout(function() {
-    var index = todoTaskList.map(todoTask => {
+    let index = todoTaskList.map(todoTask => {
       return todoTask.id;}).indexOf(selectedId);
     todoTaskList.splice(index, 1);
     selectedTask.remove(todoList);

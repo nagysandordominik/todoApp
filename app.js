@@ -1,9 +1,9 @@
 const todoInput = document.getElementById('inputT');
 const addButton = document.getElementById('addB');
 const todoList = document.getElementById('todoList');
-const todoTaskList  = [];
-const completedList = [];
-
+let todoTaskList  = [];
+let completedList = [];
+let allTasks = [];
 
 function randomId() {
   let S4 = function() {
@@ -21,6 +21,7 @@ addButton.addEventListener('click', addToDo => {
     const todoTask = {
       id: randomId(),
       text: todoInput.value,
+      isDone: false
     }
     const newTodo = document.createElement('div');
     newTodo.innerHTML =  
@@ -31,6 +32,7 @@ addButton.addEventListener('click', addToDo => {
     
   todoList.appendChild(newTodo);
   todoTaskList.push(todoTask);
+  allTasks.push(todoTask);
   todoInput.value = '';
   }
 });
@@ -40,16 +42,23 @@ function completeToDo(event) {
   selectedText.classList.toggle('text-decoration-line-through');
   let selectedId = event.target.parentNode.parentNode.id;
   let selectedDiv = event.target.parentNode.parentNode.parentNode;
-  // With timeout the selected task is removed from display and todoTaskList, than it is added to completedTodo array 
+  // With timeout the selected task is removed from display and todoTaskList, than it is added to completedList array 
   setTimeout(function() {
-    const completedTask = {
-      id: selectedId,
-      text: selectedText.innerText
-    };
     let index = todoTaskList.map(todoTask => {
       return todoTask.id;}).indexOf(selectedId);
+      todoTaskList[index].isDone
+      ? (todoTaskList[index].isDone = false)
+      : (todoTaskList[index].isDone = true);
+    
+      const completedTask = {
+        id: selectedId,
+        text: selectedText.innerText,
+        isDone:todoTaskList[index].isDone
+      };
+    
     todoTaskList.splice(index, 1);
     completedList.push(completedTask);
     selectedDiv.remove(todoList);
   }, 3000);
   }
+  

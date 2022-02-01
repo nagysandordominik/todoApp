@@ -2,7 +2,8 @@ const todoInput = document.getElementById('inputT');
 const addButton = document.getElementById('addB');
 const todoList = document.getElementById('todoList');
 const todoTaskList  = [];
-const completedToDo = [];
+const completedList = [];
+
 
 function randomId() {
   let S4 = function() {
@@ -19,7 +20,7 @@ addButton.addEventListener('click', addToDo => {
   } else {
     const todoTask = {
       id: randomId(),
-      todoText: todoInput.value,
+      text: todoInput.value,
     }
     const newTodo = document.createElement('div');
     newTodo.innerHTML =  
@@ -33,18 +34,22 @@ addButton.addEventListener('click', addToDo => {
   todoInput.value = '';
   }
 });
-
 // Checked checkboxes make todo texts line through
-function completeToDo(event, todoTask) {
+function completeToDo(event) {
   let selectedText = event.target.parentNode;
   selectedText.classList.toggle('text-decoration-line-through');
   let selectedId = event.target.parentNode.parentNode.id;
-  let selectedTask = event.target.parentNode.parentNode.parentNode;
+  let selectedDiv = event.target.parentNode.parentNode.parentNode;
   // With timeout the selected task is removed from display and todoTaskList, than it is added to completedTodo array 
   setTimeout(function() {
+    const completedTask = {
+      id: selectedId,
+      text: selectedText.innerText
+    };
     let index = todoTaskList.map(todoTask => {
       return todoTask.id;}).indexOf(selectedId);
     todoTaskList.splice(index, 1);
-    selectedTask.remove(todoList);
+    completedList.push(completedTask);
+    selectedDiv.remove(todoList);
   }, 3000);
   }

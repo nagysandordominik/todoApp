@@ -39,13 +39,12 @@ function completeToDo(event, todoTask) {
   let selectedText = event.target.parentNode;
   selectedText.classList.toggle('text-decoration-line-through');
   let selectedId = event.target.parentNode.parentNode.id;
-  let selectedTask = event.target.parentNode.parentNode;
+  let selectedTask = event.target.parentNode.parentNode.parentNode;
   // With timeout the selected task is removed from display and todoTaskList, than it is added to completedTodo array 
   setTimeout(function() {
     let index = todoTaskList.map(todoTask => {
       return todoTask.id;}).indexOf(selectedId);
     todoTaskList.splice(index, 1);
     selectedTask.remove(todoList);
-    
   }, 3000);
   }

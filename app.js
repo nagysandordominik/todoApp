@@ -1,13 +1,12 @@
+// Main parts of html side for user interaction
 const todoInput = document.getElementById('inputT');
 const addButton = document.getElementById('addB');
 const todoList = document.getElementById('todoList');
-const menus = document.querySelectorAll('a');
 
 // Arrays for 3 types of tasks 
 let activeList  = [];
 let completedList = [];
 let allTasks = [];
-
 
 // Random generated id for tasks
 function randomId() {
@@ -32,8 +31,7 @@ addButton.addEventListener('click', addToDo => {
     newTodo.innerHTML =  
     `<li id="${todoTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
      <p class="pb-1 mb-1"><input class="form-check-input me-2" type="checkbox" onclick="completeToDo(event)"/>${todoInput.value}</p>
-    </li>`
-    
+    </li>`;
     
   todoList.appendChild(newTodo);
   activeList.push(todoTask);
@@ -63,9 +61,37 @@ addButton.addEventListener('click', addToDo => {
         isDone:activeList[index].isDone
       };
     
-      activeList.splice(index, 1);
+    activeList.splice(index, 1);
     completedList.push(completedTask);
-    selectedDiv.remove(todoList);
+    selectedDiv.classList.toggle('visually-hidden');
+    // selectedDiv.remove(todoList);
   }, 3000);
+  };
+
+// Display rendering based on the user's selected menu
+function selectView(event)  {
+  // Show all tasks added by the user
+  if (event.target.id == 'all') {
+    todoList.innerHTML = allTasks.map(todoTask => 
+      `<li id="${todoTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
+      <p class="pb-1 mb-1"><input class="form-check-input me-2" type="checkbox" />${todoTask.text}</p>
+     </li>`).join('');
+    console.log('all');
   }
-  
+  // Only show tasks which are not completed yet
+  if (event.target.id == 'active') {
+    todoList.innerHTML =activeList.map(todoTask => 
+      `<li id="${todoTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
+      <p class="pb-1 mb-1"><input class="form-check-input me-2" type="checkbox" onclick="completeToDo(event)"/>${todoTask.text}</p>
+     </li>`).join('');
+    console.log('active');
+  }
+  // Only show tasks which are completed yet
+  if (event.target.id == 'completed') {
+   todoList.innerHTML =completedList.map(completedTask => 
+    `<li id="${completedTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
+    <p class="pb-1 mb-1 text-decoration-line-through"><input class="form-check-input me-2" type="checkbox" checked />${completedTask.text}</p>
+   </li>`).join('');
+    console.log('completed');
+  }
+}

@@ -74,9 +74,14 @@ function selectView(event)  {
   if (event.target.id == 'all') {
     todoList.innerHTML = allTasks.map(todoTask => 
       `<li id="${todoTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
-      <p class="pb-1 mb-1"><input class="form-check-input me-2" type="checkbox" />${todoTask.text}</p>
+      <p class="pb-1 mb-1 ${todoTask.isDone}"><input class="form-check-input me-2" type="checkbox" />${todoTask.text}</p>
      </li>`).join('');
     console.log('all');
+    let completed = document.querySelectorAll('.true');
+    for(let i = 0; i < completed.length; i++) {
+    completed[i].classList.add('text-decoration-line-through');
+    completed[i].firstElementChild.checked = true;
+    }
   }
   // Only show tasks which are not completed yet
   if (event.target.id == 'active') {

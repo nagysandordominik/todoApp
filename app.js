@@ -16,9 +16,9 @@ function randomId() {
   return (S4()+S4());
 }
 
-    // Task added to list via input typed by user
-    addButton.addEventListener('click', addToDo => {
-      event.preventDefault();
+// Task added to list via input typed by user
+addButton.addEventListener('click', addToDo => {
+  event.preventDefault();
       if (todoInput.value == '') {
         alert ('You have to type something');
       } else {
@@ -30,36 +30,40 @@ function randomId() {
         const newTodo = document.createElement('div');
         newTodo.innerHTML =  
         `<li id="${todoTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
-         <p class="pb-1 mb-1"><input class="form-check-input me-2" type="checkbox" onclick="completeToDo(event)"/>${todoInput.value}</p>
+         <p class="pb-1 mb-1"><input class="form-check-input me-2" type="checkbox" onclick="completeToDo(event); "/>${todoInput.value}</p>
         </li>`;
         
       todoList.appendChild(newTodo);
       activeList.push(todoTask);
       allTasks.push(todoTask);
+      
       todoInput.value = '';
-          }
-        }
-      );
+    }
+  }
+);
         
 
   // Checked checkboxes make todo texts line through
-  function completeToDo(event) {
+function completeToDo(event) {
     
   let selectedText = event.target.parentNode;
   let selectedId = event.target.parentNode.parentNode.id;
   let selectedDiv = event.target.parentNode.parentNode.parentNode;
   selectedText.classList.toggle('text-decoration-line-through'); 
+  
   let index = allTasks.map(todoTask => {
     return todoTask.id;}).indexOf(selectedId);
-    allTasks[index].isDone
-    ? (allTasks[index].isDone = false) 
-    : (allTasks[index].isDone = true);
+    if (allTasks[index].isDone == false){
+    allTasks[index].isDone == false
+    ? (allTasks[index].isDone = true) 
+    : (allTasks[index].isDone = false);
 
-  const completedTask = {
+    const completedTask = {
       id: selectedId,
       text: selectedText.innerText,
       isDone:allTasks[index].isDone
     };
+
 
     activeList.splice(index, 1);
     completedList.push(completedTask);
@@ -69,15 +73,31 @@ function randomId() {
     selectedDiv.classList.toggle('visually-hidden');
     // selectedDiv.remove(todoList);
       }, 3000);
+    } else if (allTasks[index].isDone == true) {
+      let index = allTasks.map(todoTask => {
+        return todoTask.id;}).indexOf(selectedId);
+      allTasks[index].isDone == true
+    ? (allTasks[index].isDone = false) 
+    : (allTasks[index].isDone = true);
+
+      const completedTask = {
+        id: selectedId,
+        text: selectedText.innerText,
+        isDone:allTasks[index].isDone
+      };
+
+      completedList.splice(index, 1);
+      activeList.push(completedTask);
     }
-  
+  }
+
 // Display rendering based on the user's selected menu
 function selectView(event)  {
   // Show all tasks added by the user
   if (event.target.id == 'all') {
     todoList.innerHTML = allTasks.map(todoTask => 
       `<li id="${todoTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
-      <p class="pb-1 mb-1 ${todoTask.isDone}"><input class="form-check-input me-2" type="checkbox" />${todoTask.text}</p>
+      <p class="pb-1 mb-1 ${todoTask.isDone}"><input class="form-check-input me-2" type="checkbox" onclick="completeToDo(event); " />${todoTask.text}</p>
      </li>`).join('');
     console.log('all');
     let completed = document.querySelectorAll('.true');
@@ -90,7 +110,7 @@ function selectView(event)  {
   if (event.target.id == 'active') {
     todoList.innerHTML =activeList.map(todoTask => 
       `<li id="${todoTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
-      <p class="pb-1 mb-1"><input class="form-check-input me-2" type="checkbox" onclick="completeToDo(event)"/>${todoTask.text}</p>
+      <p class="pb-1 mb-1"><input class="form-check-input me-2" type="checkbox" onclick="completeToDo(event); "/>${todoTask.text}</p>
      </li>`).join('');
     console.log('active');
   }
@@ -98,7 +118,7 @@ function selectView(event)  {
   if (event.target.id == 'completed') {
    todoList.innerHTML =completedList.map(completedTask => 
     `<li id="${completedTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
-    <p class="pb-1 mb-1 text-decoration-line-through"><input class="form-check-input me-2" type="checkbox" checked />${completedTask.text}</p>
+    <p class="pb-1 mb-1 text-decoration-line-through"><input class="form-check-input me-2" type="checkbox" onclick="completeToDo(event); " checked />${completedTask.text}</p>
    </li>`).join('');
     console.log('completed');
   }

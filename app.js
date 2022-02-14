@@ -2,6 +2,9 @@
 const todoInput = document.getElementById('inputT');
 const addButton = document.getElementById('addB');
 const todoList = document.getElementById('todoList');
+const activeMenu = document.getElementById('active');
+const allMenu = document.getElementById('all');
+const completedMenu = document.getElementById('completed');
 
 // Arrays for 3 types of tasks 
 let activeList  = [];
@@ -17,11 +20,11 @@ function randomId() {
 }
 
 // Task added to list via input typed by user
-addButton.addEventListener('click', addToDo => {
+ addButton.addEventListener('click', addToDo => {
   event.preventDefault();
-      if (todoInput.value == '') {
+      if (todoInput.value == ''){
         alert ('You have to type something');
-      } else {
+      } else  {
         const todoTask = {
           id: randomId(),
           text: todoInput.value,
@@ -37,6 +40,9 @@ addButton.addEventListener('click', addToDo => {
       activeList.push(todoTask);
       allTasks.push(todoTask);
       
+      JSON.stringify(todoTask);
+      localStorage.setItem('myProject', todoTask)
+
       todoInput.value = '';
     }
   }
@@ -74,8 +80,8 @@ function completeToDo(event) {
     // selectedDiv.remove(todoList);
       }, 3000);
     } else if (allTasks[index].isDone == true) {
-      let index = allTasks.map(todoTask => {
-        return todoTask.id;}).indexOf(selectedId);
+      let index = allTasks.map(completedTask => {
+        return completedTask.id;}).indexOf(selectedId);
       allTasks[index].isDone == true
     ? (allTasks[index].isDone = false) 
     : (allTasks[index].isDone = true);
@@ -86,19 +92,28 @@ function completeToDo(event) {
         isDone:allTasks[index].isDone
       };
 
-      completedList.splice(index, 1);
+      completedList.splice(index.completedTask, 1);
       activeList.push(completedTask);
     }
   }
 
 // Display rendering based on the user's selected menu
 function selectView(event)  {
+
+  if (event.target.id == 'all' || 'active') {
+    
+  }
+
   // Show all tasks added by the user
   if (event.target.id == 'all') {
+    allMenu.toggleAttribute('clicked');
     todoList.innerHTML = allTasks.map(todoTask => 
-      `<li id="${todoTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
-      <p class="pb-1 mb-1 ${todoTask.isDone}"><input class="form-check-input me-2" type="checkbox" onclick="completeToDo(event); " />${todoTask.text}</p>
-     </li>`).join('');
+      `<div>
+        <li id="${todoTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
+          <p class="pb-1 mb-1 ${todoTask.isDone}"><input class="form-check-input me-2" type="checkbox" onclick="completeToDo(event); " />${todoTask.text}</p> 
+          </li>
+      </div>    
+     `)
     console.log('all');
     let completed = document.querySelectorAll('.true');
     for(let i = 0; i < completed.length; i++) {
@@ -108,18 +123,29 @@ function selectView(event)  {
   }
   // Only show tasks which are not completed yet
   if (event.target.id == 'active') {
+    activeMenu.toggleAttribute('clicked');
     todoList.innerHTML =activeList.map(todoTask => 
-      `<li id="${todoTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
-      <p class="pb-1 mb-1"><input class="form-check-input me-2" type="checkbox" onclick="completeToDo(event); "/>${todoTask.text}</p>
-     </li>`).join('');
+      `<div>
+        <li id="${todoTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
+          <p class="pb-1 mb-1"><input class="form-check-input me-2" type="checkbox" onclick="completeToDo(event); "/>${todoTask.text}</p>
+        </li>
+     </div>    
+
+     `).join('');
     console.log('active');
   }
   // Only show tasks which are completed yet
   if (event.target.id == 'completed') {
-   todoList.innerHTML =completedList.map(completedTask => 
-    `<li id="${completedTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
-    <p class="pb-1 mb-1 text-decoration-line-through"><input class="form-check-input me-2" type="checkbox" onclick="completeToDo(event); " checked />${completedTask.text}</p>
-   </li>`).join('');
+  completedMenu.toggleAttribute('clicked');
+  todoList.innerHTML =completedList.map(completedTask => 
+    `<div>
+      <li id="${completedTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
+       <p class="pb-1 mb-1 text-decoration-line-through"><input class="form-check-input me-2" type="checkbox" onclick="completeToDo(event); " checked />${completedTask.text}</p>
+      </li>
+    </div>    
+    `).join('');
+    
     console.log('completed');
   }
 }
+

@@ -20,7 +20,7 @@ function randomId() {
 }
 
 // Task added to list via input typed by user
- addButton.addEventListener('click', addToDo => {
+ addButton.addEventListener('click', function addToDo(event)  {
   event.preventDefault();
       if (todoInput.value == ''){
         alert ('You have to type something');
@@ -30,6 +30,8 @@ function randomId() {
           text: todoInput.value,
           isDone: false
         }
+        if (event.target.id == 'all' || event.target.id == 'active') {
+        console.log(event.target.id)
         const newTodo = document.createElement('div');
         newTodo.innerHTML =  
         `<li id="${todoTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
@@ -37,6 +39,10 @@ function randomId() {
         </li>`;
         
       todoList.appendChild(newTodo);
+      } else {
+        console.log('Nothing to display here')
+      }
+
       activeList.push(todoTask);
       allTasks.push(todoTask);
       
@@ -110,10 +116,10 @@ function selectView(event)  {
     todoList.innerHTML = allTasks.map(todoTask => 
       `<div>
         <li id="${todoTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
-          <p class="pb-1 mb-1 ${todoTask.isDone}"><input class="form-check-input me-2" type="checkbox" onclick="completeToDo(event); " />${todoTask.text}</p> 
+          <p class="pb-1 mb-1 ${todoTask.isDone}"><input class="form-check-input me-2" type="checkbox" onclick="completeToDo(event);"/>${todoTask.text}</p> 
           </li>
       </div>    
-     `)
+    `).join('');
     console.log('all');
     let completed = document.querySelectorAll('.true');
     for(let i = 0; i < completed.length; i++) {

@@ -1,0 +1,9 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+body {
+	background-image: linear-gradient(hsl(273, 75%, 66%), hsl(240, 73%, 65%));
+}

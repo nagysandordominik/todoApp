@@ -30,8 +30,8 @@ function randomId() {
           text: todoInput.value,
           isDone: false
         }
-        if (event.target.id == 'all' || event.target.id == 'active') {
-        console.log(event.target.id)
+        if (window.location.href.indexOf('all') > -1 || window.location.href.indexOf('active') > -1) {
+        
         const newTodo = document.createElement('div');
         newTodo.innerHTML =  
         `<li id="${todoTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
@@ -39,16 +39,13 @@ function randomId() {
         </li>`;
         
       todoList.appendChild(newTodo);
-      } else {
+      } else if (window.location.href.indexOf('completed') > -1) {
         console.log('Nothing to display here')
       }
 
       activeList.push(todoTask);
       allTasks.push(todoTask);
       
-      JSON.stringify(todoTask);
-      localStorage.setItem('myProject', todoTask)
-
       todoInput.value = '';
     }
   }
@@ -136,7 +133,6 @@ function selectView(event)  {
           <p class="pb-1 mb-1"><input class="form-check-input me-2" type="checkbox" onclick="completeToDo(event); "/>${todoTask.text}</p>
         </li>
      </div>    
-
      `).join('');
     console.log('active');
   }

@@ -31,7 +31,6 @@ function randomId() {
           isDone: false
         }
         if (window.location.href.indexOf('all') > -1 || window.location.href.indexOf('active') > -1) {
-        
         const newTodo = document.createElement('div');
         newTodo.innerHTML =  
         `<li id="${todoTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
@@ -39,12 +38,15 @@ function randomId() {
         </li>`;
         
       todoList.appendChild(newTodo);
+
       } else if (window.location.href.indexOf('completed') > -1) {
         console.log('Nothing to display here')
       }
 
+      
       activeList.push(todoTask);
       allTasks.push(todoTask);
+      
       
       todoInput.value = '';
     }
@@ -78,11 +80,14 @@ function completeToDo(event) {
     completedList.push(completedTask);
 
   // With timeout the selected task is removed from display
-  setTimeout(function() {
+  if (window.location.href.indexOf('active') > -1)
+{  setTimeout(function() {
     selectedDiv.classList.toggle('visually-hidden');
     // selectedDiv.remove(todoList);
       }, 3000);
-    } else if (allTasks[index].isDone == true) {
+  }    
+
+      } else if (allTasks[index].isDone == true) {
       let index = allTasks.map(completedTask => {
         return completedTask.id;}).indexOf(selectedId);
       allTasks[index].isDone == true
@@ -94,11 +99,19 @@ function completeToDo(event) {
         text: selectedText.innerText,
         isDone:allTasks[index].isDone
       };
-
+      if (window.location.href.indexOf('completed') > -1 )
+    {
+      setTimeout(function() {
+      selectedDiv.classList.toggle('visually-hidden');
+    }, 3000);
+  }
       completedList.splice(index.completedTask, 1);
       activeList.push(completedTask);
     }
   }
+
+// Storing in sessionstorage every task 
+
 
 // Display rendering based on the user's selected menu
 function selectView(event)  {

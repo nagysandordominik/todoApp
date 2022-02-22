@@ -7,9 +7,9 @@ const allMenu = document.getElementById('all');
 const completedMenu = document.getElementById('completed');
 
 // Arrays for 3 types of tasks 
-let activeList  = [];
-let completedList = [];
-let allTasks = [];
+let activeList = JSON.parse(sessionStorage.getItem('todoTask')) || [];
+let completedList = JSON.parse(sessionStorage.getItem('completedTask')) || [];
+let allTasks = JSON.parse(sessionStorage.getItem('todoTask')) || [];
 
 // Random generated id for tasks
 function randomId() {
@@ -24,13 +24,14 @@ function randomId() {
   event.preventDefault();
       if (todoInput.value == ''){
         alert ('You have to type something');
-      } else  {
+      } 
+      else  {
         const todoTask = {
           id: randomId(),
           text: todoInput.value,
           isDone: false
         }
-        if (window.location.href.indexOf('all') > -1 || window.location.href.indexOf('active') > -1) {
+      if (window.location.href.indexOf('all') > -1 || window.location.href.indexOf('active') > -1) {
         const newTodo = document.createElement('div');
         newTodo.innerHTML =  
         `<li id="${todoTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
@@ -39,15 +40,17 @@ function randomId() {
         
       todoList.appendChild(newTodo);
 
-      } else if (window.location.href.indexOf('completed') > -1) {
+      } else if (window.location.href.indexOf('completed') > -1 ) {
         console.log('Nothing to display here')
       }
 
       
       activeList.push(todoTask);
+      sessionStorage.setItem('todoTask', JSON.stringify(activeList));
+      
       allTasks.push(todoTask);
-      
-      
+      sessionStorage.setItem('todoTask', JSON.stringify(allTasks));
+
       todoInput.value = '';
     }
   }
@@ -75,18 +78,21 @@ function completeToDo(event) {
       isDone:allTasks[index].isDone
     };
 
-
+    JSON.parse(sessionStorage.getItem('todoTask'));
     activeList.splice(index, 1);
+    sessionStorage.setItem('todoTask', JSON.stringify(allTasks));
+
     completedList.push(completedTask);
+    sessionStorage.setItem('completedTask', JSON.stringify(completedList));
+    
 
   // With timeout the selected task is removed from display
   if (window.location.href.indexOf('active') > -1)
 {  setTimeout(function() {
     selectedDiv.classList.toggle('visually-hidden');
-    // selectedDiv.remove(todoList);
       }, 3000);
   }    
-
+// Undo the completed task 
       } else if (allTasks[index].isDone == true) {
       let index = allTasks.map(completedTask => {
         return completedTask.id;}).indexOf(selectedId);
@@ -106,23 +112,21 @@ function completeToDo(event) {
     }, 3000);
   }
       completedList.splice(index.completedTask, 1);
+      sessionStorage.removeItem('completedTask');
       activeList.push(completedTask);
+      sessionStorage.setItem('todoTask', JSON.stringify(allTasks));
+      
     }
   }
 
-// Storing in sessionstorage every task 
+
 
 
 // Display rendering based on the user's selected menu
 function selectView(event)  {
-
-  if (event.target.id == 'all' || 'active') {
-    
-  }
-
   // Show all tasks added by the user
   if (event.target.id == 'all') {
-    allMenu.toggleAttribute('clicked');
+
     todoList.innerHTML = allTasks.map(todoTask => 
       `<div>
         <li id="${todoTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
@@ -139,19 +143,24 @@ function selectView(event)  {
   }
   // Only show tasks which are not completed yet
   if (event.target.id == 'active') {
-    activeMenu.toggleAttribute('clicked');
+    JSON.parse(sessionStorage.getItem('todoTask'));
     todoList.innerHTML =activeList.map(todoTask => 
       `<div>
         <li id="${todoTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
-          <p class="pb-1 mb-1"><input class="form-check-input me-2" type="checkbox" onclick="completeToDo(event); "/>${todoTask.text}</p>
+          <p class="pb-1 mb-1 ${todoTask.isDone}"><input class="form-check-input me-2" type="checkbox" onclick="completeToDo(event); "/>${todoTask.text}</p>
         </li>
      </div>    
      `).join('');
     console.log('active');
+    let completed = document.querySelectorAll('.true');
+    for(let i = 0; i < completed.length; i++) {
+    completed[i].parentNode.classList.add('visually-hidden');
+    completed[i].firstElementChild.checked = true;
+    }
   }
   // Only show tasks which are completed yet
   if (event.target.id == 'completed') {
-  completedMenu.toggleAttribute('clicked');
+  
   todoList.innerHTML =completedList.map(completedTask => 
     `<div>
       <li id="${completedTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">

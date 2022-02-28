@@ -31,7 +31,7 @@ function randomId() {
           text: todoInput.value,
           isDone: false
         }
-      if (window.location.href.indexOf('all') > -1 || window.location.href.indexOf('active') > -1) {
+      if (window.location.href.indexOf('#all') > -1 || window.location.href.indexOf('#active') > -1) {
         const newTodo = document.createElement('div');
         newTodo.innerHTML =  
         `<li id="${todoTask.id}" class="list-group-item justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom pb-0 mb-0">
@@ -40,7 +40,7 @@ function randomId() {
         
       todoList.appendChild(newTodo);
 
-      } else if (window.location.href.indexOf('completed') > -1 ) {
+      } else if (window.location.href.indexOf('#completed') > -1 ) {
         console.log('Nothing to display here')
       }
 
